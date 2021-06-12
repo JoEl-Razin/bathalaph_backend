@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const cartSchema = mongoose.Schema({
   name: String,
-  quantity: String,
+  quantity: Number,
   price: Number,
   image: String,
 })
