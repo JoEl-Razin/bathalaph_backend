@@ -69,7 +69,7 @@ export const deleteCart = async (req, res) => {
 
   if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`)
 
-  await Cart.findByIdAndRemove(id)
+  await Cart.findByIdAndDelete(id)
 
   res.json({message: 'Item deleted successfully'})
 }
