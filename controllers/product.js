@@ -5,16 +5,27 @@ import Product from '../models/product.js'
 
 const router = express.Router()
 
-export const getProduct = async(req, res) => {
+export const getProduct = async (req, res) => {
+  const { id } = req.params
+
   try{
-    const product = await Product.find();
+    const product = await Product.findById(id)
     res.status(200).json(product)
-  } catch(error) {
-    res.status(404).json({ message: error.message})
+  } catch (error) {
+    res.status(404).json({ message: error.message })
   }
 }
 
-export const createUser = async(req,res) => {
+export const getProducts = async (req, res) => {
+  try {
+    const product = await Product.find();
+    res.status(200).json(product)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+export const createUser = async (req, res) => {
   const {
     name,
     description,
@@ -31,10 +42,10 @@ export const createUser = async(req,res) => {
     image,
   });
 
-  try{
+  try {
     await newProduct.save()
     res.status(201).json(newProduct)
-  } catch(error){
+  } catch (error) {
     res.status(404).json({ message: error.message })
   }
 }
@@ -50,7 +61,7 @@ export const updateProduct = async (req, res) => {
     image
   } = req.body
 
-  if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send(`No post with that ID: ${id}`)
+  if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send(`No post with that ID: ${id}`)
 
   const updatedProduct = {
     id,
@@ -61,19 +72,19 @@ export const updateProduct = async (req, res) => {
     image
   }
 
-  await Product.findByIdAndUpdate(id, updateProduct, {new: true})
+  await Product.findByIdAndUpdate(id, updateProduct, { new: true })
 
   res.json(updatedProduct)
 }
 
 export const deleteProduct = async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params
 
   if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`)
 
   await Product.findByIdAndDelete(id)
 
-  res.json({ message: 'Item deleted successfully '})
+  res.json({ message: 'Item deleted successfully ' })
 }
 
 export default router

@@ -5,7 +5,18 @@ import User from '../models/user.js'
 
 const router = express.Router()
 
-export const getUser = async(req, res) => {
+export const getUser = async (req, res) => {
+  const { id } = req.params
+
+  try{
+    const user = await User.findById(id)
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+export const getUsers = async(req, res) => {
   try{
     const user = await User.find();
     res.status(200).json(user)
@@ -59,7 +70,7 @@ export const deleteUser = async (req, res) => {
   
   if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No pos with id: ${id}`)
 
-  await User.findByIdAndRemove(id)
+  await User.findByIdAndDelete(id)
 
   res.json({ message: 'Item deleted successfully'})
 }

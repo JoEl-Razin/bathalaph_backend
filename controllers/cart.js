@@ -2,11 +2,21 @@ import express from 'express'
 import mongoose from 'mongoose'
 
 import Cart from '../models/cart.js'
-import Product from '../models/product.js'
 
 const router = express.Router()
 
-export const getCart = async(req, res) => {
+export const getCart = async (req, res) => {
+  const { id } = req.params
+
+  try{
+    const cart = await Cart.findById(id)
+    res.status(200).json(cart)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+export const getCarts = async(req, res) => {
   try{
     const cart = await Cart.find()
     res.status(200).json(cart)
@@ -59,7 +69,7 @@ export const updatedCart = async (req, res) => {
     image
   }
 
-  await Product.findByIdAndUpdate(id, updatedCart, {new: true})
+  await Cart.findByIdAndUpdate(id, updatedCart, {new: true})
 
   res.json(updatedCart)
 }
